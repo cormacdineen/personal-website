@@ -1,86 +1,64 @@
-# Cormac Dineen's Academic Portfolio
+# cormacdineen.page
 
-Personal website and portfolio built with [Astro](https://astro.build) and deployed on [Vercel](https://vercel.com).
+Personal website built with [Astro](https://astro.build) v5, [Tailwind CSS](https://tailwindcss.com) v4, and the [AstroPaper](https://astro-paper.pages.dev/) theme. Deployed on [Vercel](https://vercel.com) with PWA support.
 
-## Project Structure
+## What's on the site
+
+- **Blog** — research updates and writing
+- **Photography** — gallery with EXIF data, tag filtering, and a lightbox
+- **Cultural stew** — books, films, podcasts, sport, food, and more, rated on the Cormyscale
+- **About** — biography and contact
+
+## Project structure
 
 ```text
-├── public/               # Static assets (images, fonts, favicon)
-│   ├── assets/img/       # Images for blog posts, photography, recommendations
-│   └── fonts/            # Web fonts (Inter)
+├── public/
+│   ├── assets/img/          # Photography, recommendation covers, blog images
+│   └── fonts/
 ├── src/
-│   ├── components/       # Reusable UI components
-│   ├── content/blog/     # Blog posts in Markdown (organized by year)
-│   ├── data/             # JSON data files (recommendations.json)
-│   ├── layouts/          # Page layouts and templates
-│   ├── pages/            # Routes and pages
-│   ├── styles/           # Global styles and CSS
-│   └── utils/            # Utility functions
-├── astro.config.mjs      # Astro configuration
-├── vercel.json           # Vercel deployment and security headers
-└── package.json          # Dependencies and scripts
+│   ├── components/          # Reusable UI components
+│   ├── content/blog/        # Blog posts in Markdown (organised by year)
+│   ├── data/                # JSON data (recommendations, photos)
+│   ├── layouts/             # Page layouts
+│   ├── pages/               # Routes
+│   └── styles/              # Global styles
+├── photos-source/           # Source photography + metadata.json
+├── scripts/                 # Build helpers (EXIF extraction, etc.)
+├── astro.config.mjs
+└── package.json
 ```
-
-## Pages
-
-| Route               | Description                              |
-| :------------------- | :--------------------------------------- |
-| `/`                  | Home — landing page with section links   |
-| `/blog`              | Blog — research updates and writing      |
-| `/photography`       | Photography — image gallery              |
-| `/recommendations`   | Recommendations — books, podcasts, films |
-| `/about`             | About — biography and contact            |
 
 ## Commands
 
-| Command              | Action                                      |
-| :------------------- | :------------------------------------------ |
-| `npm install`        | Install dependencies                        |
-| `npm run dev`        | Start local dev server at `localhost:4321`   |
-| `npm run build`      | Build the production site to `./dist/`       |
-| `npm run preview`    | Preview the build locally before deploying   |
+| Command | Action |
+| :--- | :--- |
+| `npm install` | Install dependencies |
+| `npm run dev` | Start local dev server at `localhost:4321` |
+| `npm run build` | Build production site to `./dist/` |
+| `npm run preview` | Preview the build locally |
+| `npm run photos:exif` | Regenerate `photos.json` from source images and `metadata.json` |
 
-## Content Workflow
+## Photo pipeline
 
-### Blog Posts
+1. Drop source images into `photos-source/`
+2. Add tags and captions in `photos-source/metadata.json` (this is the source of truth)
+3. Run `npm run photos:exif` to generate optimised WebP thumbnails, display images, and `src/data/photos.json`
 
-1. Create a `.md` file in `src/content/blog/YEAR/post-slug.md`
-2. Add required frontmatter:
-   ```yaml
-   ---
-   title: "Your Post Title"
-   pubDatetime: 2026-02-12T00:00:00.000Z
-   description: "Brief description for SEO and previews."
-   tags:
-     - research
-     - topic
-   ---
-   ```
-3. Optional frontmatter: `heroImage`, `featured: true`, `draft: true`
-4. Run `npm run dev` to preview locally
-5. Push to `main` — Vercel auto-deploys
-
-### Photography
-
-1. Resize images for web: max 2000px wide, JPEG quality 80-85 or WebP
-2. Place in `public/assets/img/photography/`
-3. Update the photo array in `src/pages/photography.astro`
-
-### Recommendations
+## Adding recommendations
 
 1. Edit `src/data/recommendations.json`
-2. Add cover images to `public/assets/img/recommendations/`
-3. Each entry: `{ "type": "book|podcast|movie", "title", "creator", "cover", "note" }`
+2. Add cover images (WebP, reasonably sized) to `public/assets/img/recommendations/`
+3. Categories are hardcoded in `recommendations.astro`; tags auto-populate from the JSON
 
 ## Deployment
 
-Connected to Vercel for automatic builds on push to `main`. Custom domain: `cormacdineen.page`.
+Vercel auto-deploys on push to `main`. Custom domain: [cormacdineen.page](https://cormacdineen.page).
 
-## License
+## Licence
 
 - **Content**: [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
-- **Code**: [MIT License](LICENSE)
+- **Code**: [MIT](LICENSE)
 
 ## Credits
 
-Based on the [AstroPaper theme](https://astro-paper.pages.dev/) by [Sat Naing](https://github.com/satnaing).
+Based on [AstroPaper](https://astro-paper.pages.dev/) by [Sat Naing](https://github.com/satnaing).
