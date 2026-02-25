@@ -1,0 +1,72 @@
+---
+export interface Props {
+  type: "BlogPosting" | "Person" | "WebSite";
+  data: any;
+}
+
+const { type, data } = Astro.props;
+
+let structuredData = {};
+
+if (type === "BlogPosting") {
+  structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: data.title,
+    description: data.description,
+    author: {
+      "@type": "Person",
+      name: data.author || "Cormac Dineen",
+      url: "https://cormacdineen.page/about",
+    },
+    datePublished: data.pubDatetime.toISOString(),
+    dateModified: data.modDatetime?.toISOString() || data.pubDatetime.toISOString(),
+    publisher: {
+      "@type": "Person",
+      name: "Cormac Dineen",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": data.url,
+    },
+    image: data.ogImage,
+    articleSection: data.tags?.[0] || "Research",
+    keywords: data.tags?.join(", ") || "",
+    wordCount: data.wordCount,
+    timeRequired: data.readingTime,
+  };
+} else if (type === "Person") {
+  structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Cormac Dineen",
+    url: "https://cormacdineen.page",
+    sameAs: [
+      "https://github.com/placeholder",
+      "https://twitter.com/placeholder",
+      "https://bsky.app/profile/placeholder",
+    ],
+    jobTitle: "PhD Researcher",
+    description: "PhD researcher. Photography, reading, and occasional writing.",
+  };
+} else if (type === "WebSite") {
+  structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Cormac Dineen",
+    url: "https://cormacdineen.page",
+    description: "PhD researcher. Photography, reading, and occasional writing.",
+    author: {
+      "@type": "Person",
+      name: "Cormac Dineen",
+    },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://cormacdineen.page/search?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

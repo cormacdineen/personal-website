@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <!-- Metallic gradient for the bar -->
+    <linearGradient id="bar-top" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5cc4c8"/>
+      <stop offset="35%" stop-color="#0d7377"/>
+      <stop offset="60%" stop-color="#a8e6e8"/>
+      <stop offset="100%" stop-color="#0a5c5f"/>
+    </linearGradient>
+    <linearGradient id="bar-front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d7377"/>
+      <stop offset="100%" stop-color="#064547"/>
+    </linearGradient>
+    <linearGradient id="bar-side" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a5c5f"/>
+      <stop offset="100%" stop-color="#043234"/>
+    </linearGradient>
+    <!-- Cube gradients -->
+    <linearGradient id="cube-top" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38b2ac"/>
+      <stop offset="100%" stop-color="#5cc4c8"/>
+    </linearGradient>
+    <linearGradient id="cube-front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d7377"/>
+      <stop offset="100%" stop-color="#064547"/>
+    </linearGradient>
+    <linearGradient id="cube-side" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a5c5f"/>
+      <stop offset="100%" stop-color="#043234"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Elongated faceted cadmium bar -->
+  <!-- Top face (irregular faceted surface) -->
+  <polygon points="8,58 22,42 55,36 95,40 108,52 90,60 50,64 20,62" fill="url(#bar-top)"/>
+  <!-- Highlight facet on top -->
+  <polygon points="35,46 60,40 80,43 55,50" fill="#a8e6e8" opacity="0.4"/>
+  <!-- Front face -->
+  <polygon points="8,58 20,62 50,64 90,60 108,52 108,72 90,80 50,84 20,82 8,78" fill="url(#bar-front)"/>
+  <!-- Bottom front edge highlight -->
+  <polygon points="20,82 50,84 90,80 108,72 108,68 90,76 50,80 20,78" fill="#064547"/>
+  <!-- Left end face -->
+  <polygon points="8,58 22,42 22,62 20,62 8,78" fill="url(#bar-side)"/>
+
+  <!-- Small cube (right side) -->
+  <!-- Top face -->
+  <polygon points="100,78 112,72 124,78 112,84" fill="url(#cube-top)"/>
+  <!-- Front face -->
+  <polygon points="100,78 112,84 112,102 100,96" fill="url(#cube-front)"/>
+  <!-- Right face -->
+  <polygon points="112,84 124,78 124,96 112,102" fill="url(#cube-side)"/>
+</svg>

@@ -1,0 +1,249 @@
+---
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import { SITE } from "@/consts";
+import photosData from "@/data/photos.json";
+import Layout from "@/layouts/Layout.astro";
+
+// Use real photos from photos.json if available, otherwise show placeholders
+const hasRealPhotos = photosData.length > 0;
+
+const placeholderPhotos = [
+  {
+    thumb: "https://placehold.co/800x600/0d7377/ffffff?text=Photo+1",
+    display: "https://placehold.co/800x600/0d7377/ffffff?text=Photo+1",
+    alt: "Placeholder photo 1",
+    caption: "Sample photo 1",
+    date: "2026-01",
+    tags: ["landscape"],
+  },
+  {
+    thumb: "https://placehold.co/600x800/1a3a5c/ffffff?text=Photo+2",
+    display: "https://placehold.co/600x800/1a3a5c/ffffff?text=Photo+2",
+    alt: "Placeholder photo 2",
+    caption: "Sample photo 2",
+    date: "2026-01",
+    tags: ["portrait"],
+  },
+  {
+    thumb: "https://placehold.co/800x500/38b2ac/ffffff?text=Photo+3",
+    display: "https://placehold.co/800x500/38b2ac/ffffff?text=Photo+3",
+    alt: "Placeholder photo 3",
+    caption: "Sample photo 3",
+    date: "2025-12",
+    tags: ["landscape"],
+  },
+  {
+    thumb: "https://placehold.co/700x700/92400e/ffffff?text=Photo+4",
+    display: "https://placehold.co/700x700/92400e/ffffff?text=Photo+4",
+    alt: "Placeholder photo 4",
+    caption: "Sample photo 4",
+    date: "2025-12",
+    tags: ["street"],
+  },
+  {
+    thumb: "https://placehold.co/800x600/2d3748/ffffff?text=Photo+5",
+    display: "https://placehold.co/800x600/2d3748/ffffff?text=Photo+5",
+    alt: "Placeholder photo 5",
+    caption: "Sample photo 5",
+    date: "2025-11",
+    tags: ["street"],
+  },
+  {
+    thumb: "https://placehold.co/500x800/d4a259/ffffff?text=Photo+6",
+    display: "https://placehold.co/500x800/d4a259/ffffff?text=Photo+6",
+    alt: "Placeholder photo 6",
+    caption: "Sample photo 6",
+    date: "2025-11",
+    tags: ["portrait"],
+  },
+];
+
+const photos = hasRealPhotos ? photosData : placeholderPhotos;
+
+// Collect unique tags for filtering
+const allTags = [...new Set(photos.flatMap((p) => p.tags || []))].sort();
+---
+
+<Layout title={`Photography | ${SITE.title}`} description="A gallery of photographs by Cormac Dineen.">
+  <Header />
+  <main id="main-content" class="mx-auto w-full max-w-3xl px-4 pb-12">
+    <h1 class="text-2xl font-semibold sm:text-3xl mt-8">Photography</h1>
+    <p class="mt-2 mb-6 italic">Click any image to view it larger. Only if you would like to.</p>
+
+    <!-- Filters — collapsible drawer (tags only) -->
+    {allTags.length > 0 && (
+      <div class="mb-6">
+        <button id="filter-toggle" class="px-4 py-1.5 rounded-full text-sm font-medium border border-border text-foreground/70 bg-transparent hover:border-accent hover:text-accent cursor-pointer transition-colors">
+          Filter
+        </button>
+        <div id="filter-drawer" class="hidden mt-3">
+          <div class="flex gap-1.5 flex-wrap items-center">
+            <span class="text-xs text-foreground/50 mr-1">Tags:</span>
+            {allTags.map((tag) => (
+              <button class="photo-tag-btn px-2.5 py-0.5 rounded-full text-xs border border-border text-foreground/70 bg-transparent hover:border-accent hover:text-accent cursor-pointer transition-colors" data-tag={tag}>{tag}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
+
+    <!-- Photo grid -->
+    <div id="photo-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      {photos.map((photo, i) => (
+        <button
+          class="gallery-item overflow-hidden rounded-lg cursor-pointer border-0 p-0 bg-transparent"
+          data-index={i}
+          data-display={photo.display}
+          data-alt={photo.alt}
+          data-caption={photo.caption || ""}
+          data-date={photo.date?.slice(0, 7) || ""}
+          data-tags={(photo.tags || []).join(",")}
+        >
+          <img
+            src={photo.thumb}
+            alt={photo.alt}
+            class="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+            loading="lazy"
+          />
+        </button>
+      ))}
+    </div>
+
+    <!-- Lightbox overlay -->
+    <div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 p-4">
+      <button id="lb-close" class="absolute top-4 right-4 text-white text-3xl bg-transparent border-0 cursor-pointer leading-none z-10 hover:text-accent transition-colors" aria-label="Close">&times;</button>
+      <button id="lb-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl bg-transparent border-0 cursor-pointer leading-none z-10 hover:text-accent transition-colors" aria-label="Previous">&lsaquo;</button>
+      <button id="lb-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl bg-transparent border-0 cursor-pointer leading-none z-10 hover:text-accent transition-colors" aria-label="Next">&rsaquo;</button>
+      <img id="lb-img" src="" alt="" class="max-h-[85vh] max-w-[90vw] object-contain rounded" />
+      <div class="absolute bottom-6 left-0 right-0 text-center">
+        <p id="lb-caption" class="text-white text-sm"></p>
+        <p id="lb-counter" class="text-white/50 text-xs mt-1"></p>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<script is:inline>
+  document.addEventListener("astro:page-load", () => {
+    const lightbox = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lb-img");
+    const lbCaption = document.getElementById("lb-caption");
+    const lbCounter = document.getElementById("lb-counter");
+    const lbClose = document.getElementById("lb-close");
+    const lbPrev = document.getElementById("lb-prev");
+    const lbNext = document.getElementById("lb-next");
+
+    const allItems = Array.from(document.querySelectorAll(".gallery-item"));
+    let visibleItems = [...allItems];
+    let currentIndex = 0;
+
+    // --- Lightbox ---
+    function openLightbox(index) {
+      if (visibleItems.length === 0) return;
+      currentIndex = index;
+      updateLightboxImage();
+      lightbox.classList.remove("hidden");
+      lightbox.classList.add("flex");
+    }
+
+    function closeLightbox() {
+      lightbox.classList.add("hidden");
+      lightbox.classList.remove("flex");
+      lbImg.src = "";
+    }
+
+    function updateLightboxImage() {
+      const item = visibleItems[currentIndex];
+      if (!item) return;
+      lbImg.src = item.dataset.display;
+      lbImg.alt = item.dataset.alt;
+      lbCaption.textContent = item.dataset.caption || "";
+      lbCounter.textContent = `${currentIndex + 1} of ${visibleItems.length}`;
+    }
+
+    function navigate(direction) {
+      currentIndex = (currentIndex + direction + visibleItems.length) % visibleItems.length;
+      updateLightboxImage();
+    }
+
+    allItems.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const idx = visibleItems.indexOf(btn);
+        if (idx !== -1) openLightbox(idx);
+      });
+    });
+
+    lbClose.addEventListener("click", closeLightbox);
+    lbPrev.addEventListener("click", () => navigate(-1));
+    lbNext.addEventListener("click", () => navigate(1));
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (!lightbox.classList.contains("flex")) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") navigate(-1);
+      if (e.key === "ArrowRight") navigate(1);
+    });
+
+    // --- Filter drawer toggle ---
+    const filterToggle = document.getElementById("filter-toggle");
+    const filterDrawer = document.getElementById("filter-drawer");
+    if (filterToggle && filterDrawer) {
+      filterToggle.addEventListener("click", () => {
+        filterDrawer.classList.toggle("hidden");
+        const isOpen = !filterDrawer.classList.contains("hidden");
+        filterToggle.textContent = isOpen ? "Hide filters" : "Filter";
+        if (isOpen) {
+          filterToggle.classList.add("bg-accent", "text-white", "border-accent");
+          filterToggle.classList.remove("text-foreground/70", "border-border");
+        } else {
+          filterToggle.classList.remove("bg-accent", "text-white", "border-accent");
+          filterToggle.classList.add("text-foreground/70", "border-border");
+        }
+      });
+    }
+
+    // --- Tag filtering (single-select) ---
+    const tagButtons = document.querySelectorAll(".photo-tag-btn");
+    let activeTag = null;
+
+    function applyFilters() {
+      visibleItems = [];
+      allItems.forEach((item) => {
+        const itemTags = item.dataset.tags ? item.dataset.tags.split(",") : [];
+        const matches = !activeTag || itemTags.includes(activeTag);
+
+        if (matches) {
+          item.style.display = "";
+          visibleItems.push(item);
+        } else {
+          item.style.display = "none";
+        }
+      });
+    }
+
+    tagButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const tag = btn.dataset.tag;
+        // Deselect all buttons first
+        tagButtons.forEach((b) => {
+          b.classList.remove("bg-accent", "text-white", "border-accent");
+          b.classList.add("border-border", "text-foreground/70");
+        });
+        if (activeTag === tag) {
+          // Toggle off — show all
+          activeTag = null;
+        } else {
+          // Activate this tag only
+          activeTag = tag;
+          btn.classList.add("bg-accent", "text-white", "border-accent");
+          btn.classList.remove("border-border", "text-foreground/70");
+        }
+        applyFilters();
+      });
+    });
+  });
+</script>

@@ -1,0 +1,133 @@
+[
+  {
+    "type": "experience",
+    "title": "Unintentionally ordering a red or white pizza",
+    "creator": "",
+    "cover": "/assets/img/recommendations/white-pizza.webp",
+    "note": "They should put any red (no cheese) or white (no tomato sauce) pizzas in a separate part of the menu. I have my night ruined 2 or 3 times a year by accidently ordering one of these things. 2 deciCormys awarded because it allows for a pleasureble tirade.",
+    "tags": ["food", "dissapointing"],
+    "rating": 0.2,
+    "date": ""
+  },
+
+  {
+    "type": "experience",
+    "title": "Winning big on a scratchcard",
+    "creator": "",
+    "cover": "/assets/img/recommendations/lottery.webp",
+    "note": "Winning big is any win which is 10X more than the value of the scratchcard. This feels absolutly fantastic, 2 deciCormys docked because you're likely to hand the winnings straight back to the National Lottery.",
+    "tags": ["experience", "brilliant"],
+    "rating": 9.8,
+    "date": ""
+  },
+  {
+    "type": "book",
+    "title": "Prophet Song",
+    "creator": "Paul Lynch",
+    "cover": "/assets/img/recommendations/prophet-song.webp",
+    "note": "Page turner, grim imagining of Ireland under an authoritarian government. Weird style and accelerating pace. There was something not quite resonating with me about the way in which the characters behaved, almost a caricature of Irishness, but a good read overall.",
+    "tags": ["fiction", "dystopian"],
+    "rating": 6.8,
+    "date": ""
+  },
+  {
+    "type": "book",
+    "title": "Do Androids Dream of Electric Sheep?",
+    "creator": "Phillip K. Dick",
+    "cover": "/assets/img/recommendations/do-androids.webp",
+    "note": "This book freaked my nut out as Danny Dyer would put it. Had seen Blade Runner before but found the book much less structured and more thought provoking. The concept of kipple (useless rubbish that builds up to infinity) was a scary thought in the era of runaway AI slop and bots on the internet.",
+    "tags": ["sci-fi", "dystopian"],
+    "rating": 8.5,
+    "date": ""
+  },
+  {
+    "type": "podcast",
+    "title": "Revolution in Iran",
+    "creator": "Rest is History",
+    "cover": "/assets/img/recommendations/RIH-iran.webp",
+    "note": "This was one of their better series. I knew nothing about Jimmy Carter before listening and enjoyed how derisive Dominic was of his presidency, some very funny lines in there about his cardigans and miserable addresses to the nation. Gave me a much improved handle on the history of Iran. ",
+    "tags": ["20th century", "history"],
+    "rating": 7.6,
+    "date": ""
+  },
+  {
+    "type": "movie",
+    "title": "Sinners",
+    "creator": "Ryan Coogler",
+    "cover": "/assets/img/recommendations/sinners-poster.webp",
+    "note": "Top notch film, I thought Michael B. Jordan was outstanding. Irish vampire, Rocky Road to Dublin and generally a fair few nods to Ireland (although unsure if we are considered oppressors or oppressed). Only minor drawback was the faint marvel style of the closing scenes.",
+    "tags": ["drama", "horror"],
+    "rating": 8.1,
+    "date": "2026-02"
+  },
+  {
+    "type": "movie",
+    "title": "Avatar: Fire and Ash",
+    "creator": "James Cameron",
+    "cover": "/assets/img/recommendations/avatar-3-poster.webp",
+    "note": "Absolutely diabolical. At least an hour too long. Saw this in the cinema and actually laughed out loud once or twice when it became apparent that they weren't going to roll the credits and were gearing up for another scene. We've seen enough of these characters, James.",
+    "tags": ["fantasy", "drama", "dissapointing"],
+    "rating": 2.9,
+    "date": ""
+  },
+  {
+    "type": "tv",
+    "title": "Succession",
+    "creator": "Jesse Armstrong",
+    "cover": "/assets/img/recommendations/succession.webp",
+    "note": "Second time watching this through and comfortably into my top 5 shows. Even funnier than I remember, Tom and Greg are the best partnership since Lennon and McCartney. Some fairly dark insights about human nature from Logan and Roman in particular that hit home this time around.",
+    "tags": ["drama", "comedy"],
+    "rating": 8.8,
+    "date": ""
+  },
+  {
+    "type": "tv",
+    "title": "The Pacific",
+    "creator": "Tom Hanks, Stephen Spielberg",
+    "cover": "/assets/img/recommendations/pacific.webp",
+    "note": "Very, very good. Felt like it narrows in on the mind and soul of the main characters better than Band of Brothers but moves along a little bit worse. Horrendous conditions in the Pacific theatre, the skeleton in the crater sticks in my mind. Would've liked a bit more naval stuff, which was probably more consequential to the war. ",
+    "tags": ["war", "drama"],
+    "rating": 7.6,
+    "date": ""
+  },
+  {
+    "type": "sport",
+    "title": "Matchday at Charlton Athletic",
+    "creator": "The Valley, London",
+    "cover": "/assets/img/recommendations/charlton.webp",
+    "note": "Ususally get tickets in the covered end lower. Old school ground with a throwback toxic atmoshpere that can catch fire if we are doing well. Pints are between £7-£8 if you can get one, more likely is that you'll spend all of half time waiting 10 deep in the queue.",
+    "tags": ["football", "live"],
+    "rating": 7.2,
+    "date": ""
+  },
+  {
+    "type": "sport",
+    "title": "Matchday at QPR",
+    "creator": "Loftus Road, London",
+    "cover": "/assets/img/recommendations/qpr.webp",
+    "note": "Got tickets in the home end to support Charlton, by the time we went 3-1 down I wasn't even bothered with keeping up the act. Decent ground, guy a few seats down was asking for the manager to sub off their keeper for the entire first half until they got a lead which provided some much needed comedic relief.",
+    "tags": ["rugby", "live"],
+    "rating": 5.7,
+    "date": ""
+  },
+  {
+    "type": "food",
+    "title": "Sample Restaurant",
+    "creator": "Location / Chef",
+    "cover": "https://placehold.co/200x200/d4a259/ffffff?text=Food",
+    "note": "A brief note about this restaurant or recipe.",
+    "tags": ["restaurant", "irish"],
+    "rating": 8.3,
+    "date": ""
+  },
+  {
+    "type": "food",
+    "title": "Another Food Spot",
+    "creator": "Another Location",
+    "cover": "https://placehold.co/200x200/d4a259/ffffff?text=Food+2",
+    "note": "Another food recommendation.",
+    "tags": ["cafe", "brunch"],
+    "rating": 7.0,
+    "date": ""
+  }
+]

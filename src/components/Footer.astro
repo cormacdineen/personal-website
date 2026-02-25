@@ -1,0 +1,29 @@
+---
+import Hr from "./Hr.astro";
+import Socials from "./Socials.astro";
+
+export interface Props {
+  noMarginTop?: boolean;
+}
+
+const { noMarginTop = false } = Astro.props;
+---
+
+<footer class:list={["w-full", { "mt-auto": !noMarginTop }]}>
+  <Hr noPadding />
+  <div
+    class="flex flex-col items-center justify-between py-6 sm:flex-row-reverse sm:py-4"
+  >
+    <Socials centered />
+    <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row">
+      <span class="text-foreground/60">
+        &copy; {new Date().getFullYear()} Cormac Dineen
+      </span>
+      <span class="text-foreground/40 mx-1 hidden sm:inline">&bull;</span>
+      <span class="text-foreground/40 text-xs">
+        Built with <a href="https://astro.build" class="hover:text-accent" target="_blank" rel="noopener noreferrer">Astro</a>
+        &amp; <a href="https://github.com/satnaing/astro-paper" class="hover:text-accent" target="_blank" rel="noopener noreferrer">AstroPaper</a>
+      </span>
+    </div>
+  </div>
+</footer>
