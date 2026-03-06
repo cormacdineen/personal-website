@@ -47,8 +47,9 @@ Personal website built with [Astro](https://astro.build) v5, [Tailwind CSS](http
 ## Adding recommendations
 
 1. Edit `src/data/recommendations.json`
-2. Add cover images (WebP, reasonably sized) to `public/assets/img/recommendations/`
-3. Categories are hardcoded in `recommendations.astro`; tags auto-populate from the JSON
+2. Drop cover images (JPG, PNG, or WebP) into `public/assets/img/recommendations/`
+3. Run `npm run rec:optimize` to convert any JPG/PNG covers to 800px-wide WebP and delete the originals
+4. Categories are hardcoded in `recommendations.astro`; tags auto-populate from the JSON
 
 ## Deployment
 

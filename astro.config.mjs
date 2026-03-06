@@ -1,11 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
-import mdx from "@astrojs/mdx";
 import sitemap, { ChangeFreqEnum } from "@astrojs/sitemap";
-import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
-import remarkToc from "remark-toc";
-import remarkCollapse from "remark-collapse";
 import { remarkLazyLoadImages } from "./src/utils/remarkLazyLoadImages.mjs";
 import { SITE } from "./src/config";
 import AstroPWA from "@vite-pwa/astro";
@@ -16,9 +12,6 @@ export default defineConfig({
   trailingSlash: "never",
   markdown: {
     remarkPlugins: [
-      remarkToc,
-      // @ts-ignore - TypeScript has issues with remark plugin tuple syntax
-      [remarkCollapse, { test: "Table of contents" }],
       remarkLazyLoadImages
     ],
     shikiConfig: {
@@ -28,8 +21,7 @@ export default defineConfig({
     },
   },
   integrations: [
-    mdx(),
-	    sitemap({
+    sitemap({
 	      filter: (page) => {
 	        // Always exclude archives if not showing them
 	        if (!SITE.showArchives && page.endsWith("/archives")) return false;
@@ -96,7 +88,6 @@ export default defineConfig({
         return item;
       }
     }),
-    react(),
     AstroPWA({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico"],
