@@ -140,6 +140,14 @@ const allTags = [...new Set(photos.flatMap((p) => p.tags || []))].sort();
     let currentIndex = 0;
 
     // --- Lightbox ---
+    function preloadAdjacent(index) {
+      [-1, 1].forEach(offset => {
+        const i = (index + offset + visibleItems.length) % visibleItems.length;
+        const src = visibleItems[i]?.dataset.display;
+        if (src) { const img = new Image(); img.src = src; }
+      });
+    }
+
     function openLightbox(index) {
       if (visibleItems.length === 0) return;
       currentIndex = index;
@@ -150,6 +158,7 @@ const allTags = [...new Set(photos.flatMap((p) => p.tags || []))].sort();
       lbCounter.textContent = `${index + 1} of ${visibleItems.length}`;
       document.body.style.overflow = "hidden";
       lightbox.style.display = "flex";
+      preloadAdjacent(index);
     }
 
     function closeLightbox() {
@@ -170,6 +179,7 @@ const allTags = [...new Set(photos.flatMap((p) => p.tags || []))].sort();
     function navigate(direction) {
       currentIndex = (currentIndex + direction + visibleItems.length) % visibleItems.length;
       updateLightboxImage();
+      preloadAdjacent(currentIndex);
     }
 
     allItems.forEach((btn) => {
