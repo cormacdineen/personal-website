@@ -1,5 +1,35 @@
 [
   {
+    "type": "book",
+    "title": "The Pianist",
+    "creator": "Władysław Szpilman",
+    "cover": "/assets/img/recommendations/download.webp",
+    "note": "Reads like a novel rather than a memoir. Absolutely brutal when he's separated from his family at the train station. Read this around the same time as Prophet Song, the latter of which felt a bit like an empty tribute.",
+    "tags": [],
+    "rating": 8.6,
+    "date": ""
+  },
+  {
+    "type": "book",
+    "title": "The Heart of Darkness",
+    "creator": "Joseph Conrad",
+    "cover": "/assets/img/recommendations/71MFRCo1OpL._AC_UF894,1000_QL80_.webp",
+    "note": "Fairly pessimistic worldview on parade here. Found myself getting bogged down in stretches though due to the unusual style. Anyone is capable of anything is the general idea, and I think I agree.",
+    "tags": [],
+    "rating": 6.9,
+    "date": ""
+  },
+  {
+    "type": "book",
+    "title": "What Are You Going Through",
+    "creator": "Sigrid Nunez",
+    "cover": "/assets/img/recommendations/51152434.webp",
+    "note": "Weird book. Feel like it went a bit over my head. Moving in parts, especially as it progresses and the narrator shifts from detached to emotional but didn't quite resonate.",
+    "tags": [],
+    "rating": 5.7,
+    "date": ""
+  },
+  {
     "type": "experience",
     "title": "Unintentionally ordering a red or white pizza",
     "creator": "",
@@ -9,12 +39,11 @@
     "rating": 0.2,
     "date": ""
   },
-
   {
     "type": "experience",
     "title": "Winning big on a scratchcard",
     "creator": "",
-    "cover": "/assets/img/recommendations/lottery.webp",
+    "cover": "/assets/img/recommendations/scratchcard.webp",
     "note": "Winning big is any win which is 10X more than the value of the scratchcard. This feels absolutly fantastic, 2 deciCormys docked because you're likely to hand the winnings straight back to the National Lottery.",
     "tags": ["experience", "brilliant"],
     "rating": 9.8,
@@ -37,7 +66,7 @@
     "cover": "/assets/img/recommendations/do-androids.webp",
     "note": "This book freaked my nut out as Danny Dyer would put it. Had seen Blade Runner before but found the book much less structured and more thought provoking. The concept of kipple (useless rubbish that builds up to infinity) was a scary thought in the era of runaway AI slop and bots on the internet.",
     "tags": ["sci-fi", "dystopian"],
-    "rating": 8.5,
+    "rating": 8.2,
     "date": ""
   },
   {
@@ -112,12 +141,12 @@
   },
   {
     "type": "food",
-    "title": "Sample Restaurant",
-    "creator": "Location / Chef",
-    "cover": "https://placehold.co/200x200/d4a259/ffffff?text=Food",
-    "note": "A brief note about this restaurant or recipe.",
-    "tags": ["restaurant", "irish"],
-    "rating": 8.3,
+    "title": "Anglothai",
+    "creator": "Marylebone",
+    "cover": "/assets/img/recommendations/Anglothai.webp",
+    "note": "12 noon res on a Saturday. A time of the week when I'd usually have my sights trained on a humble bacon sangwich, this week it was a 6 course, succulent thai meal. Absolutely incredible. Washed it down with a few beers watching Ireland England in the 6 Nations.",
+    "tags": ["restaurant", "thai"],
+    "rating": 9.1,
     "date": ""
   },
   {
@@ -127,7 +156,7 @@
     "cover": "https://placehold.co/200x200/d4a259/ffffff?text=Food+2",
     "note": "Another food recommendation.",
     "tags": ["cafe", "brunch"],
-    "rating": 7.0,
+    "rating": 7,
     "date": ""
   }
 ]
