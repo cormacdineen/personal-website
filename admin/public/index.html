@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — cormacdineen.page</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2a2d3a;
+      --text: #e1e4ed;
+      --muted: #8b8fa3;
+      --accent: #0d7377;
+      --accent-hover: #38b2ac;
+      --danger: #e53e3e;
+      --success: #38a169;
+      --radius: 6px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    header h1 { font-size: 1.1rem; font-weight: 600; }
+    header .dot { color: var(--accent); }
+    nav { display: flex; gap: 0; margin-left: 2rem; }
+    nav button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    nav button:hover { color: var(--text); }
+    nav button.active { color: var(--accent-hover); border-bottom-color: var(--accent); }
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+    .tab { display: none; }
+    .tab.active { display: block; }
+    h2 { font-size: 1.2rem; margin-bottom: 1rem; }
+    h3 { font-size: 1rem; margin: 1.5rem 0 0.75rem; color: var(--muted); }
+
+    /* Form elements */
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.25rem; }
+    input[type="text"], input[type="number"], input[type="date"], select, textarea {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    textarea { min-height: 200px; resize: vertical; font-family: 'Menlo', 'Consolas', monospace; font-size: 0.85rem; }
+    .form-row { margin-bottom: 1rem; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* Buttons */
+    button, .btn {
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .btn-danger { color: var(--danger); }
+    .btn-danger:hover { border-color: var(--danger); }
+    .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
+
+    /* Cards / lists */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+    .card-title { font-weight: 600; }
+    .card-meta { font-size: 0.8rem; color: var(--muted); }
+
+    /* Tags */
+    .tag-input-wrap { display: flex; gap: 0.5rem; }
+    .tag-input-wrap input { flex: 1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.78rem;
+    }
+    .tag .remove { cursor: pointer; color: var(--muted); }
+    .tag .remove:hover { color: var(--danger); }
+
+    /* Upload area */
+    .upload-area {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .upload-area:hover, .upload-area.dragover { border-color: var(--accent); }
+    .upload-area input { display: none; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius);
+      background: var(--success);
+      color: #fff;
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.error { background: var(--danger); }
+
+    /* Photo grid */
+    .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; }
+    .photo-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .photo-card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+    .photo-card .info { padding: 0.5rem; font-size: 0.75rem; color: var(--muted); }
+    .photo-card .info .name { color: var(--text); font-weight: 500; }
+    .photo-card .tagged { color: var(--success); }
+
+    /* Rec list */
+    .rec-type { text-transform: capitalize; font-size: 0.75rem; background: var(--bg); padding: 0.15rem 0.5rem; border-radius: 99px; }
+    .rec-rating { color: var(--accent-hover); font-weight: 600; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 50;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .modal h3 { margin-top: 0; color: var(--text); }
+    .modal-actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem; }
+
+    /* Autocomplete */
+    .tag-input-container { position: relative; flex: 1; }
+    .tag-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 10;
+      display: none;
+    }
+    .tag-suggestions.show { display: block; }
+    .tag-suggestion {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .tag-suggestion:hover, .tag-suggestion.highlighted { background: var(--bg); color: var(--accent-hover); }
+
+    /* Status */
+    .status-bar {
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: 'Menlo', 'Consolas', monospace;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>cormacdineen<span class="dot">.</span>page</h1>
+    <nav>
+      <button class="active" data-tab="photos">Photography</button>
+      <button data-tab="blog">Blog</button>
+      <button data-tab="recs">Recommendations</button>
+      <button data-tab="about">About</button>
+    </nav>
+  </header>
+
+  <!-- PHOTOGRAPHY TAB -->
+  <div class="container tab active" id="tab-photos">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+      <h2>Photography</h2>
+      <div style="display:flex; gap:0.5rem;">
+        <button class="btn btn-primary" onclick="processPhotos()">Process photos</button>
+      </div>
+    </div>
+
+    <div class="upload-area" id="photo-upload-area">
+      <p>Drop photos here or click to upload</p>
+      <p style="font-size:0.8rem;">JPG, PNG, WEBP, TIFF, ARW</p>
+      <input type="file" id="photo-file-input" multiple accept=".jpg,.jpeg,.png,.webp,.tiff,.arw">
+    </div>
+
+    <div id="photo-status" class="status-bar" style="display:none;"></div>
+
+    <h3>Photos in metadata</h3>
+    <div id="photo-grid" class="photo-grid"></div>
+
+    <!-- Photo edit modal -->
+    <div class="modal-overlay" id="photo-modal">
+      <div class="modal">
+        <h3 id="photo-modal-title">Edit photo</h3>
+        <div class="form-row">
+          <label>Caption</label>
+          <input type="text" id="photo-caption">
+        </div>
+        <div class="form-row">
+          <label>Tags</label>
+          <div class="tag-input-wrap">
+            <div class="tag-input-container">
+              <input type="text" id="photo-tag-input" placeholder="Add tag and press Enter" autocomplete="off">
+              <div class="tag-suggestions" id="photo-tag-suggestions"></div>
+            </div>
+          </div>
+          <div class="tags" id="photo-tags"></div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn" onclick="closePhotoModal()">Cancel</button>
+          <button class="btn btn-danger" onclick="deletePhoto()">Delete photo</button>
+          <button class="btn btn-primary" onclick="savePhotoMeta()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOG TAB -->
+  <div class="container tab" id="tab-blog">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+      <h2>Blog posts</h2>
+      <button class="btn btn-primary" onclick="showNewPostForm()">New post</button>
+    </div>
+
+    <div id="post-list"></div>
+
+    <!-- New/edit post form -->
+    <div class="modal-overlay" id="post-modal">
+      <div class="modal" style="max-width:750px;">
+        <h3 id="post-modal-title">New post</h3>
+        <div class="form-grid">
+          <div class="form-row">
+            <label>Title</label>
+            <input type="text" id="post-title">
+          </div>
+          <div class="form-row">
+            <label>Slug</label>
+            <input type="text" id="post-slug" placeholder="auto-generated-from-title">
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-row">
+            <label>Year</label>
+            <input type="text" id="post-year" value="2026">
+          </div>
+          <div class="form-row">
+            <label>Description</label>
+            <input type="text" id="post-description">
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Tags</label>
+          <div class="tag-input-wrap">
+            <div class="tag-input-container">
+              <input type="text" id="post-tag-input" placeholder="Add tag and press Enter" autocomplete="off">
+              <div class="tag-suggestions" id="post-tag-suggestions"></div>
+            </div>
+          </div>
+          <div class="tags" id="post-tags"></div>
+        </div>
+        <div class="form-row">
+          <label style="display:flex; align-items:center; gap:0.5rem;">
+            <input type="checkbox" id="post-draft"> Draft
+          </label>
+        </div>
+        <div class="form-row">
+          <label>Body (markdown)</label>
+          <textarea id="post-body" style="min-height:300px;"></textarea>
+          <details style="margin-top:0.5rem; font-size:0.8rem; color:var(--muted);">
+            <summary style="cursor:pointer;">Markdown cheatsheet</summary>
+            <div style="margin-top:0.5rem; display:grid; grid-template-columns:1fr 1fr; gap:0.25rem 1.5rem; font-family:'Menlo','Consolas',monospace; line-height:1.8;">
+              <span># Heading 1</span><span>## Heading 2</span>
+              <span>**bold**</span><span>*italic*</span>
+              <span>[link text](url)</span><span>![alt](image-url)</span>
+              <span>- bullet list</span><span>1. numbered list</span>
+              <span>> blockquote</span><span>`inline code`</span>
+              <span>```lang ... ```</span><span>--- horizontal rule</span>
+              <span>~~strikethrough~~</span><span>| table | cols |</span>
+            </div>
+          </details>
+        </div>
+        <div class="modal-actions">
+          <button class="btn" onclick="closePostModal()">Cancel</button>
+          <button class="btn btn-danger" id="post-delete-btn" style="display:none;" onclick="deletePost()">Delete</button>
+          <button class="btn btn-primary" onclick="savePost()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECOMMENDATIONS TAB -->
+  <div class="container tab" id="tab-recs">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+      <h2>Recommendations</h2>
+      <button class="btn btn-primary" onclick="showNewRecForm()">Add recommendation</button>
+    </div>
+
+    <div id="rec-list"></div>
+
+    <!-- New/edit rec form -->
+    <div class="modal-overlay" id="rec-modal">
+      <div class="modal">
+        <h3 id="rec-modal-title">New recommendation</h3>
+        <div class="form-grid">
+          <div class="form-row">
+            <label>Title</label>
+            <input type="text" id="rec-title">
+          </div>
+          <div class="form-row">
+            <label>Type</label>
+            <select id="rec-type">
+              <option value="book">Book</option>
+              <option value="movie">Movie</option>
+              <option value="tv">TV</option>
+              <option value="podcast">Podcast</option>
+              <option value="sport">Sport</option>
+              <option value="food">Food</option>
+              <option value="experience">Experience</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-row">
+            <label>Creator</label>
+            <input type="text" id="rec-creator" placeholder="Author, director, etc.">
+          </div>
+          <div class="form-row">
+            <label>Cormyscale (0-10)</label>
+            <input type="number" id="rec-rating" min="0" max="10" step="0.1" value="0">
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Date</label>
+          <input type="text" id="rec-date" placeholder="YYYY-MM">
+        </div>
+        <div class="form-row">
+          <label>Note</label>
+          <textarea id="rec-note" style="min-height:100px;"></textarea>
+        </div>
+        <div class="form-row">
+          <label>Tags</label>
+          <div class="tag-input-wrap">
+            <div class="tag-input-container">
+              <input type="text" id="rec-tag-input" placeholder="Add tag and press Enter" autocomplete="off">
+              <div class="tag-suggestions" id="rec-tag-suggestions"></div>
+            </div>
+          </div>
+          <div class="tags" id="rec-tags"></div>
+        </div>
+        <div class="form-row">
+          <label>Cover image</label>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <input type="file" id="rec-cover-input" accept=".jpg,.jpeg,.png,.webp">
+            <span id="rec-cover-path" style="font-size:0.8rem; color:var(--muted);"></span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn" onclick="closeRecModal()">Cancel</button>
+          <button class="btn btn-danger" id="rec-delete-btn" style="display:none;" onclick="deleteRec()">Delete</button>
+          <button class="btn btn-primary" onclick="saveRec()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT TAB -->
+  <div class="container tab" id="tab-about">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+      <h2>About page</h2>
+      <button class="btn btn-primary" onclick="saveAbout()">Save</button>
+    </div>
+    <p style="font-size:0.85rem; color:var(--muted); margin-bottom:1rem;">Edit the HTML content of your about page. Changes are written directly to <code>src/pages/about.astro</code>.</p>
+    <textarea id="about-content" style="min-height:500px; resize:vertical; font-family:'Menlo','Consolas',monospace; font-size:0.85rem; width:100%; padding:0.75rem; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); color:var(--text);"></textarea>
+    <details style="margin-top:0.5rem; font-size:0.8rem; color:var(--muted);">
+      <summary style="cursor:pointer;">HTML cheatsheet</summary>
+      <div style="margin-top:0.5rem; display:grid; grid-template-columns:1fr 1fr; gap:0.25rem 1.5rem; font-family:'Menlo','Consolas',monospace; line-height:1.8;">
+        <span>&lt;h2&gt;Heading&lt;/h2&gt;</span><span>&lt;h3&gt;Subheading&lt;/h3&gt;</span>
+        <span>&lt;p&gt;Paragraph&lt;/p&gt;</span><span>&lt;strong&gt;bold&lt;/strong&gt;</span>
+        <span>&lt;em&gt;italic&lt;/em&gt;</span><span>&lt;a href="url"&gt;link&lt;/a&gt;</span>
+        <span>&lt;ul&gt;&lt;li&gt;item&lt;/li&gt;&lt;/ul&gt;</span><span>&lt;ol&gt;&lt;li&gt;item&lt;/li&gt;&lt;/ol&gt;</span>
+      </div>
+    </details>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Tabs ----
+    document.querySelectorAll("nav button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+      });
+    });
+
+    // ---- Toast ----
+    function toast(msg, isError = false) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.className = "toast show" + (isError ? " error" : "");
+      setTimeout(() => el.className = "toast", 2500);
+    }
+
+    // ---- API helpers ----
+    async function api(url, opts = {}) {
+      const res = await fetch(url, {
+        headers: { "Content-Type": "application/json", ...opts.headers },
+        ...opts,
+      });
+      return res.json();
+    }
+
+    // ========================================
+    // PHOTOGRAPHY
+    // ========================================
+    let photoMetadata = {};
+    let photosList = [];
+    let editingPhoto = null;
+    let photoTagList = [];
+
+    async function loadPhotos() {
+      const data = await api("/api/photos");
+      photosList = data.photos;
+      photoMetadata = data.metadata;
+      renderPhotoGrid();
+    }
+
+    function renderPhotoGrid() {
+      const grid = document.getElementById("photo-grid");
+      const entries = Object.entries(photoMetadata);
+      if (entries.length === 0) {
+        grid.innerHTML = '<p style="color:var(--muted);">No photos in metadata.json yet. Upload photos and run processing.</p>';
+        return;
+      }
+
+      // Sort by date from photos.json (newest first), unmatched at the end
+      entries.sort(([filenameA], [filenameB]) => {
+        const photoA = photosList.find(p => p.thumb.includes(filenameA.replace(/\.\w+$/, "")));
+        const photoB = photosList.find(p => p.thumb.includes(filenameB.replace(/\.\w+$/, "")));
+        const dateA = photoA?.date || "";
+        const dateB = photoB?.date || "";
+        if (dateA && dateB) return dateB.localeCompare(dateA);
+        if (dateA) return -1;
+        if (dateB) return 1;
+        return filenameA.localeCompare(filenameB);
+      });
+
+      grid.innerHTML = entries.map(([filename, meta]) => {
+        const photo = photosList.find(p => p.thumb.includes(filename.replace(/\.\w+$/, "")));
+        const thumbSrc = photo ? photo.thumb : "";
+        const hasTags = meta.tags && meta.tags.length > 0;
+        const dateStr = photo?.date ? `<div>${photo.date}</div>` : "";
+        return `
+          <div class="photo-card" onclick="editPhoto('${filename}')">
+            ${thumbSrc ? `<img src="${thumbSrc}" alt="${filename}" loading="lazy">` : `<div style="aspect-ratio:1;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:var(--muted);">No thumb</div>`}
+            <div class="info">
+              <div class="name">${filename}</div>
+              ${dateStr}
+              ${hasTags ? `<div class="tagged">${meta.tags.join(", ")}</div>` : '<div>No tags</div>'}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function editPhoto(filename) {
+      editingPhoto = filename;
+      const meta = photoMetadata[filename] || { caption: "", tags: [] };
+      document.getElementById("photo-modal-title").textContent = filename;
+      document.getElementById("photo-caption").value = meta.caption || "";
+      photoTagList = [...(meta.tags || [])];
+      renderPhotoTags();
+      document.getElementById("photo-modal").classList.add("show");
+    }
+
+    function renderPhotoTags() {
+      document.getElementById("photo-tags").innerHTML = photoTagList.map((t, i) =>
+        `<span class="tag">${t} <span class="remove" onclick="removePhotoTag(${i})">×</span></span>`
+      ).join("");
+    }
+
+    function removePhotoTag(i) { photoTagList.splice(i, 1); renderPhotoTags(); }
+
+    function closePhotoModal() { document.getElementById("photo-modal").classList.remove("show"); }
+
+    async function savePhotoMeta() {
+      const caption = document.getElementById("photo-caption").value;
+      await api(`/api/photos/metadata/${editingPhoto}`, {
+        method: "PUT",
+        body: JSON.stringify({ caption, tags: photoTagList }),
+      });
+      toast("Metadata saved");
+      closePhotoModal();
+      loadPhotos();
+    }
+
+    async function deletePhoto() {
+      if (!editingPhoto || !confirm(`Delete ${editingPhoto}? This removes the source file, thumbnails, and metadata.`)) return;
+      await api(`/api/photos/${editingPhoto}`, { method: "DELETE" });
+      toast("Photo deleted");
+      closePhotoModal();
+      loadPhotos();
+    }
+
+    // Upload handling
+    const uploadArea = document.getElementById("photo-upload-area");
+    const fileInput = document.getElementById("photo-file-input");
+
+    uploadArea.addEventListener("click", () => fileInput.click());
+    uploadArea.addEventListener("dragover", e => { e.preventDefault(); uploadArea.classList.add("dragover"); });
+    uploadArea.addEventListener("dragleave", () => uploadArea.classList.remove("dragover"));
+    uploadArea.addEventListener("drop", e => {
+      e.preventDefault();
+      uploadArea.classList.remove("dragover");
+      uploadPhotos(e.dataTransfer.files);
+    });
+    fileInput.addEventListener("change", () => uploadPhotos(fileInput.files));
+
+    async function uploadPhotos(files) {
+      if (!files.length) return;
+      const form = new FormData();
+      for (const f of files) form.append("photos", f);
+      uploadArea.innerHTML = `<p>Uploading ${files.length} file(s)...</p>`;
+      try {
+        const res = await fetch("/api/photos/upload", { method: "POST", body: form });
+        const data = await res.json();
+        toast(`Uploaded ${data.uploaded.length} photo(s)`);
+      } catch (err) {
+        toast("Upload failed: " + err.message, true);
+      }
+      uploadArea.innerHTML = `<p>Drop photos here or click to upload</p><p style="font-size:0.8rem;">JPG, PNG, WEBP, TIFF, ARW</p>`;
+      fileInput.value = "";
+    }
+
+    async function processPhotos() {
+      const statusEl = document.getElementById("photo-status");
+      statusEl.style.display = "block";
+      statusEl.textContent = "Processing photos... this may take a moment.";
+      try {
+        const data = await api("/api/photos/process", { method: "POST" });
+        statusEl.textContent = data.output || "Done!";
+        toast("Photos processed");
+        loadPhotos();
+      } catch (err) {
+        statusEl.textContent = "Error: " + err.message;
+        toast("Processing failed", true);
+      }
+    }
+
+    // ========================================
+    // BLOG
+    // ========================================
+    let postTagList = [];
+    let editingPost = null;
+
+    async function loadPosts() {
+      const posts = await api("/api/posts");
+      const list = document.getElementById("post-list");
+      if (posts.length === 0) {
+        list.innerHTML = '<p style="color:var(--muted);">No posts yet.</p>';
+        return;
+      }
+      list.innerHTML = posts.map(p => {
+        const titleMatch = p.frontmatter.match(/title:\s*"?([^"\n]+)"?/);
+        const title = titleMatch ? titleMatch[1] : p.slug;
+        const draftMatch = p.frontmatter.match(/draft:\s*true/);
+        return `
+          <div class="card" onclick="editPost('${p.year}','${p.slug}')" style="cursor:pointer;">
+            <div class="card-header">
+              <span class="card-title">${title} ${draftMatch ? '<span style="color:var(--muted);">(draft)</span>' : ''}</span>
+              <span class="card-meta">${p.year}/${p.slug}.md</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function showNewPostForm() {
+      editingPost = null;
+      document.getElementById("post-modal-title").textContent = "New post";
+      document.getElementById("post-title").value = "";
+      document.getElementById("post-slug").value = "";
+      document.getElementById("post-year").value = new Date().getFullYear().toString();
+      document.getElementById("post-description").value = "";
+      document.getElementById("post-draft").checked = false;
+      document.getElementById("post-body").value = "";
+      document.getElementById("post-delete-btn").style.display = "none";
+      postTagList = [];
+      renderPostTags();
+      document.getElementById("post-modal").classList.add("show");
+    }
+
+    async function editPost(year, slug) {
+      const post = await api(`/api/posts/${year}/${slug}`);
+      editingPost = { year, slug };
+      document.getElementById("post-modal-title").textContent = "Edit post";
+      // Parse frontmatter
+      const fm = post.frontmatter;
+      const titleMatch = fm.match(/title:\s*"?([^"\n]+)"?/);
+      const descMatch = fm.match(/description:\s*"?([^"\n]+)"?/);
+      const tagMatches = [...fm.matchAll(/^\s+-\s+(.+)$/gm)];
+
+      document.getElementById("post-title").value = titleMatch ? titleMatch[1] : "";
+      document.getElementById("post-slug").value = slug;
+      document.getElementById("post-year").value = year;
+      document.getElementById("post-description").value = descMatch ? descMatch[1] : "";
+      document.getElementById("post-draft").checked = /draft:\s*true/.test(fm);
+      document.getElementById("post-body").value = post.body.trim();
+      document.getElementById("post-delete-btn").style.display = "inline-flex";
+
+      postTagList = tagMatches.map(m => m[1].trim());
+      renderPostTags();
+      document.getElementById("post-modal").classList.add("show");
+    }
+
+    function renderPostTags() {
+      document.getElementById("post-tags").innerHTML = postTagList.map((t, i) =>
+        `<span class="tag">${t} <span class="remove" onclick="removePostTag(${i})">×</span></span>`
+      ).join("");
+    }
+
+    function removePostTag(i) { postTagList.splice(i, 1); renderPostTags(); }
+
+    // Auto-generate slug from title
+    document.getElementById("post-title").addEventListener("input", e => {
+      if (!editingPost) {
+        document.getElementById("post-slug").value = e.target.value
+          .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      }
+    });
+
+    function closePostModal() { document.getElementById("post-modal").classList.remove("show"); }
+
+    async function savePost() {
+      const title = document.getElementById("post-title").value.trim();
+      const slug = document.getElementById("post-slug").value.trim();
+      const year = document.getElementById("post-year").value.trim();
+      const description = document.getElementById("post-description").value.trim();
+      const draft = document.getElementById("post-draft").checked;
+      const body = document.getElementById("post-body").value;
+
+      if (!title || !slug || !year || !description) {
+        toast("Fill in all required fields", true);
+        return;
+      }
+
+      if (editingPost) {
+        // Rebuild raw content
+        const tagYaml = postTagList.map(t => `  - ${t}`).join("\n") || "  - others";
+        const now = new Date().toISOString();
+        const fmMatch = body ? body : "";
+        const raw = [
+          "---",
+          `title: "${title}"`,
+          `pubDatetime: ${editingPost.pubDatetime || now}`,
+          `description: "${description}"`,
+          "tags:",
+          tagYaml,
+          draft ? "draft: true" : null,
+          "---",
+          "",
+          body,
+          "",
+        ].filter(l => l !== null).join("\n");
+
+        // For edits, preserve original pubDatetime
+        const original = await api(`/api/posts/${editingPost.year}/${editingPost.slug}`);
+        const pubMatch = original.frontmatter.match(/pubDatetime:\s*(.+)/);
+        const pubDatetime = pubMatch ? pubMatch[1].trim() : now;
+
+        const rawFinal = raw.replace(/pubDatetime:\s*.+/, `pubDatetime: ${pubDatetime}`);
+
+        await api(`/api/posts/${editingPost.year}/${editingPost.slug}`, {
+          method: "PUT",
+          body: JSON.stringify({ raw: rawFinal }),
+        });
+        toast("Post updated");
+      } else {
+        await api("/api/posts", {
+          method: "POST",
+          body: JSON.stringify({ year, slug, title, description, tags: postTagList, body, draft }),
+        });
+        toast("Post created");
+      }
+      closePostModal();
+      loadPosts();
+    }
+
+    async function deletePost() {
+      if (!editingPost || !confirm("Delete this post?")) return;
+      await api(`/api/posts/${editingPost.year}/${editingPost.slug}`, { method: "DELETE" });
+      toast("Post deleted");
+      closePostModal();
+      loadPosts();
+    }
+
+    // ========================================
+    // RECOMMENDATIONS
+    // ========================================
+    let recTagList = [];
+    let editingRecIdx = null;
+    let recCoverPath = "";
+
+    async function loadRecs() {
+      const recs = await api("/api/recommendations");
+      const list = document.getElementById("rec-list");
+      if (recs.length === 0) {
+        list.innerHTML = '<p style="color:var(--muted);">No recommendations yet.</p>';
+        return;
+      }
+      list.innerHTML = recs.map((r, i) => `
+        <div class="card" onclick="editRec(${i})" style="cursor:pointer;">
+          <div class="card-header">
+            <span>
+              <span class="card-title">${r.title}</span>
+              ${r.creator ? `<span class="card-meta"> — ${r.creator}</span>` : ""}
+            </span>
+            <span>
+              <span class="rec-type">${r.type}</span>
+              <span class="rec-rating" style="margin-left:0.5rem;">${r.rating}/10</span>
+            </span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function showNewRecForm() {
+      editingRecIdx = null;
+      recCoverPath = "";
+      document.getElementById("rec-modal-title").textContent = "New recommendation";
+      document.getElementById("rec-title").value = "";
+      document.getElementById("rec-type").value = "book";
+      document.getElementById("rec-creator").value = "";
+      document.getElementById("rec-rating").value = "0";
+      document.getElementById("rec-date").value = "";
+      document.getElementById("rec-note").value = "";
+      document.getElementById("rec-cover-path").textContent = "";
+      document.getElementById("rec-cover-input").value = "";
+      document.getElementById("rec-delete-btn").style.display = "none";
+      recTagList = [];
+      renderRecTags();
+      document.getElementById("rec-modal").classList.add("show");
+    }
+
+    async function editRec(idx) {
+      const recs = await api("/api/recommendations");
+      const r = recs[idx];
+      editingRecIdx = idx;
+      document.getElementById("rec-modal-title").textContent = "Edit recommendation";
+      document.getElementById("rec-title").value = r.title;
+      document.getElementById("rec-type").value = r.type;
+      document.getElementById("rec-creator").value = r.creator;
+      document.getElementById("rec-rating").value = r.rating;
+      document.getElementById("rec-date").value = r.date;
+      document.getElementById("rec-note").value = r.note;
+      document.getElementById("rec-cover-path").textContent = r.cover || "No cover";
+      document.getElementById("rec-cover-input").value = "";
+      document.getElementById("rec-delete-btn").style.display = "inline-flex";
+      recCoverPath = r.cover || "";
+      recTagList = [...(r.tags || [])];
+      renderRecTags();
+      document.getElementById("rec-modal").classList.add("show");
+    }
+
+    function renderRecTags() {
+      document.getElementById("rec-tags").innerHTML = recTagList.map((t, i) =>
+        `<span class="tag">${t} <span class="remove" onclick="removeRecTag(${i})">×</span></span>`
+      ).join("");
+    }
+
+    function removeRecTag(i) { recTagList.splice(i, 1); renderRecTags(); }
+
+    // Cover upload
+    document.getElementById("rec-cover-input").addEventListener("change", async e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const form = new FormData();
+      form.append("cover", file);
+      try {
+        const res = await fetch("/api/recommendations/cover", { method: "POST", body: form });
+        const data = await res.json();
+        recCoverPath = data.path;
+        document.getElementById("rec-cover-path").textContent = data.path;
+        toast("Cover uploaded and optimized");
+      } catch (err) {
+        toast("Cover upload failed", true);
+      }
+    });
+
+    function closeRecModal() { document.getElementById("rec-modal").classList.remove("show"); }
+
+    async function saveRec() {
+      const entry = {
+        title: document.getElementById("rec-title").value.trim(),
+        type: document.getElementById("rec-type").value,
+        creator: document.getElementById("rec-creator").value.trim(),
+        rating: parseFloat(document.getElementById("rec-rating").value) || 0,
+        date: document.getElementById("rec-date").value.trim(),
+        note: document.getElementById("rec-note").value.trim(),
+        tags: recTagList,
+        cover: recCoverPath,
+      };
+
+      if (!entry.title || !entry.type) {
+        toast("Title and type are required", true);
+        return;
+      }
+
+      if (editingRecIdx !== null) {
+        await api(`/api/recommendations/${editingRecIdx}`, {
+          method: "PUT",
+          body: JSON.stringify(entry),
+        });
+        toast("Recommendation updated");
+      } else {
+        await api("/api/recommendations", {
+          method: "POST",
+          body: JSON.stringify(entry),
+        });
+        toast("Recommendation added");
+      }
+      closeRecModal();
+      loadRecs();
+    }
+
+    async function deleteRec() {
+      if (editingRecIdx === null || !confirm("Delete this recommendation?")) return;
+      await api(`/api/recommendations/${editingRecIdx}`, { method: "DELETE" });
+      toast("Recommendation deleted");
+      closeRecModal();
+      loadRecs();
+    }
+
+    // ---- Close modals on overlay click ----
+    document.querySelectorAll(".modal-overlay").forEach(overlay => {
+      overlay.addEventListener("click", e => {
+        if (e.target === overlay) overlay.classList.remove("show");
+      });
+    });
+
+    // ---- Close modals on Escape ----
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") {
+        document.querySelectorAll(".modal-overlay.show").forEach(m => m.classList.remove("show"));
+      }
+    });
+
+    // ---- Tag autocomplete ----
+    let allTags = { photos: [], posts: [], recs: [] };
+
+    async function loadAllTags() {
+      allTags = await api("/api/tags");
+    }
+
+    function setupTagAutocomplete(inputId, suggestionsId, getTagList, addTag) {
+      const input = document.getElementById(inputId);
+      const sugBox = document.getElementById(suggestionsId);
+      let highlightIdx = -1;
+
+      input.addEventListener("input", () => {
+        const val = input.value.trim().toLowerCase();
+        if (!val) { sugBox.classList.remove("show"); return; }
+        // Determine which tag pool to use based on input id
+        let pool = [];
+        if (inputId.startsWith("photo")) pool = allTags.photos;
+        else if (inputId.startsWith("post")) pool = allTags.posts;
+        else if (inputId.startsWith("rec")) pool = allTags.recs;
+
+        const currentTags = getTagList();
+        const matches = pool.filter(t => t.includes(val) && !currentTags.includes(t)).slice(0, 8);
+        if (matches.length === 0) { sugBox.classList.remove("show"); return; }
+
+        highlightIdx = -1;
+        sugBox.innerHTML = matches.map((t, i) =>
+          `<div class="tag-suggestion" data-idx="${i}" data-tag="${t}">${t}</div>`
+        ).join("");
+        sugBox.classList.add("show");
+
+        sugBox.querySelectorAll(".tag-suggestion").forEach(el => {
+          el.addEventListener("mousedown", e => {
+            e.preventDefault();
+            addTag(el.dataset.tag);
+            input.value = "";
+            sugBox.classList.remove("show");
+          });
+        });
+      });
+
+      input.addEventListener("keydown", e => {
+        const items = sugBox.querySelectorAll(".tag-suggestion");
+        if (e.key === "ArrowDown" && sugBox.classList.contains("show")) {
+          e.preventDefault();
+          highlightIdx = Math.min(highlightIdx + 1, items.length - 1);
+          items.forEach((el, i) => el.classList.toggle("highlighted", i === highlightIdx));
+        } else if (e.key === "ArrowUp" && sugBox.classList.contains("show")) {
+          e.preventDefault();
+          highlightIdx = Math.max(highlightIdx - 1, 0);
+          items.forEach((el, i) => el.classList.toggle("highlighted", i === highlightIdx));
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          if (highlightIdx >= 0 && highlightIdx < items.length) {
+            addTag(items[highlightIdx].dataset.tag);
+          } else {
+            const val = input.value.trim().toLowerCase();
+            if (val) addTag(val);
+          }
+          input.value = "";
+          sugBox.classList.remove("show");
+        } else if (e.key === "Escape") {
+          sugBox.classList.remove("show");
+        }
+      });
+
+      input.addEventListener("blur", () => {
+        setTimeout(() => sugBox.classList.remove("show"), 150);
+      });
+    }
+
+    function addPhotoTagAC(tag) {
+      if (!photoTagList.includes(tag)) { photoTagList.push(tag); renderPhotoTags(); }
+    }
+    function addPostTagAC(tag) {
+      if (!postTagList.includes(tag)) { postTagList.push(tag); renderPostTags(); }
+    }
+    function addRecTagAC(tag) {
+      if (!recTagList.includes(tag)) { recTagList.push(tag); renderRecTags(); }
+    }
+
+    setupTagAutocomplete("photo-tag-input", "photo-tag-suggestions", () => photoTagList, addPhotoTagAC);
+    setupTagAutocomplete("post-tag-input", "post-tag-suggestions", () => postTagList, addPostTagAC);
+    setupTagAutocomplete("rec-tag-input", "rec-tag-suggestions", () => recTagList, addRecTagAC);
+
+    // ========================================
+    // ABOUT
+    // ========================================
+    async function loadAbout() {
+      try {
+        const data = await api("/api/about");
+        document.getElementById("about-content").value = data.content || "";
+      } catch {
+        document.getElementById("about-content").value = "Error loading about page.";
+      }
+    }
+
+    async function saveAbout() {
+      const content = document.getElementById("about-content").value;
+      await api("/api/about", { method: "PUT", body: JSON.stringify({ content }) });
+      toast("About page saved");
+    }
+
+    // ---- Init ----
+    loadAllTags();
+    loadPhotos();
+    loadPosts();
+    loadRecs();
+    loadAbout();
+  </script>
+</body>
+</html>

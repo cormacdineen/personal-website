@@ -110,20 +110,20 @@ const allTags = [...new Set(photos.flatMap((p) => p.tags || []))].sort();
       ))}
     </div>
 
-    <!-- Lightbox overlay -->
-    <div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 p-4">
-      <button id="lb-close" class="absolute top-4 right-4 text-white text-3xl bg-transparent border-0 cursor-pointer leading-none z-10 hover:text-accent transition-colors" aria-label="Close">&times;</button>
-      <button id="lb-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl bg-transparent border-0 cursor-pointer leading-none z-10 hover:text-accent transition-colors" aria-label="Previous">&lsaquo;</button>
-      <button id="lb-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl bg-transparent border-0 cursor-pointer leading-none z-10 hover:text-accent transition-colors" aria-label="Next">&rsaquo;</button>
-      <img id="lb-img" src="" alt="" class="max-h-[85vh] max-w-[90vw] object-contain rounded" />
-      <div class="absolute bottom-6 left-0 right-0 text-center">
-        <p id="lb-caption" class="text-white text-sm"></p>
-        <p id="lb-counter" class="text-white/50 text-xs mt-1"></p>
-      </div>
-    </div>
   </main>
   <Footer />
 </Layout>
+
+<div id="lightbox" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.92); padding:1rem; align-items:center; justify-content:center;">
+  <button id="lb-close" style="position:absolute; top:1rem; right:1rem; color:white; font-size:2rem; background:none; border:none; cursor:pointer; z-index:10; line-height:1;" aria-label="Close">&times;</button>
+  <button id="lb-prev" style="position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:white; font-size:2.5rem; background:none; border:none; cursor:pointer; z-index:10; line-height:1;" aria-label="Previous">&lsaquo;</button>
+  <button id="lb-next" style="position:absolute; right:1rem; top:50%; transform:translateY(-50%); color:white; font-size:2.5rem; background:none; border:none; cursor:pointer; z-index:10; line-height:1;" aria-label="Next">&rsaquo;</button>
+  <img id="lb-img" src="" alt="" style="max-height:85vh; max-width:90vw; object-fit:contain; border-radius:0.25rem;" />
+  <div style="position:absolute; bottom:1.5rem; left:0; right:0; text-align:center;">
+    <p id="lb-caption" style="color:white; font-size:0.875rem; margin:0;"></p>
+    <p id="lb-counter" style="color:rgba(255,255,255,0.5); font-size:0.75rem; margin-top:0.25rem;"></p>
+  </div>
+</div>
 
 <script is:inline>
   document.addEventListener("astro:page-load", () => {
@@ -143,14 +143,18 @@ const allTags = [...new Set(photos.flatMap((p) => p.tags || []))].sort();
     function openLightbox(index) {
       if (visibleItems.length === 0) return;
       currentIndex = index;
-      updateLightboxImage();
-      lightbox.classList.remove("hidden");
-      lightbox.classList.add("flex");
+      const item = visibleItems[index];
+      lbImg.src = item.dataset.display;
+      lbImg.alt = item.dataset.alt;
+      lbCaption.textContent = item.dataset.caption || "";
+      lbCounter.textContent = `${index + 1} of ${visibleItems.length}`;
+      document.body.style.overflow = "hidden";
+      lightbox.style.display = "flex";
     }
 
     function closeLightbox() {
-      lightbox.classList.add("hidden");
-      lightbox.classList.remove("flex");
+      lightbox.style.display = "none";
+      document.body.style.overflow = "";
       lbImg.src = "";
     }
 
@@ -182,7 +186,7 @@ const allTags = [...new Set(photos.flatMap((p) => p.tags || []))].sort();
       if (e.target === lightbox) closeLightbox();
     });
     document.addEventListener("keydown", (e) => {
-      if (!lightbox.classList.contains("flex")) return;
+      if (lightbox.style.display === "none" || !lightbox.style.display) return;
       if (e.key === "Escape") closeLightbox();
       if (e.key === "ArrowLeft") navigate(-1);
       if (e.key === "ArrowRight") navigate(1);
